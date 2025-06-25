@@ -1,9 +1,20 @@
 # Remote Shell MCP Server
 
+[![smithery badge](https://smithery.ai/badge/@samihalawa/remote-shell-terminal-mcp)](https://smithery.ai/server/@samihalawa/remote-shell-terminal-mcp)
+
 This demonstrates a structured approach for using an [MCP](https://modelcontextprotocol.io/introduction) server to execute shell commands remotely. The server can be used with any MCP-compatible client and provides essential tools for running shell commands on remote systems.
 
 ## Installation
 
+### Installing via Smithery
+
+To install remote-shell-terminal-mcp for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@samihalawa/remote-shell-terminal-mcp):
+
+```bash
+npx -y @smithery/cli install @samihalawa/remote-shell-terminal-mcp --client claude
+```
+
+### Manual Installation
 1. Clone this repository
 2. Initialize the `uv` environment:
 
