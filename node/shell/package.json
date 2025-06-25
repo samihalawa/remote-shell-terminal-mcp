@@ -1,10 +1,10 @@
 {
-  "name": "@mem0/mcp-server",
+  "name": "@remote-shell/mcp-server",
   "version": "0.0.1",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "mem0-mcp": "dist/index.js"
+    "remote-shell-mcp": "dist/index.js"
   },
   "scripts": {
     "build": "tsup",
@@ -20,18 +20,18 @@
   },
   "keywords": [
     "mcp",
-    "mem0",
-    "memory",
-    "ai",
-    "agents"
+    "shell",
+    "terminal",
+    "remote",
+    "command",
+    "execution"
   ],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Remote Shell MCP Server for executing shell commands",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.8.0",
     "dotenv": "^16.5.0",
-    "mem0ai": "^2.1.11",
     "tsup": "^8.4.0",
     "zod": "^3.24.2"
   },

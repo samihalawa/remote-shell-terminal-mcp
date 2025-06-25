@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+remote_shell_mcp.egg-info/PKG-INFO
+remote_shell_mcp.egg-info/SOURCES.txt
+remote_shell_mcp.egg-info/dependency_links.txt
+remote_shell_mcp.egg-info/requires.txt
+remote_shell_mcp.egg-info/top_level.txt
