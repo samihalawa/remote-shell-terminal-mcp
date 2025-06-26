@@ -1,94 +1,92 @@
-# Remote Shell MCP Server
+# Remote Shell Terminal MCP Server
 
-This demonstrates a structured approach for using an [MCP](https://modelcontextprotocol.io/introduction) server to execute shell commands remotely. The server can be used with any MCP-compatible client and provides essential tools for running shell commands on remote systems.
-
-## Installation
-
-1. Clone this repository
-2. Initialize the `uv` environment:
-
-```bash
-uv venv
-```
-
-3. Activate the virtual environment:
-
-```bash
-source .venv/bin/activate
-```
-
-4. Install the dependencies using `uv`:
-
-```bash
-# Install in editable mode from pyproject.toml
-uv pip install -e .
-```
-
-5. Optionally, create a `.env` file for any environment-specific configuration (currently not required for basic functionality).
-
-## Usage
-
-1. Start the MCP server:
-
-```bash
-uv run main.py
-```
-
-2. In MCP-compatible clients, connect to the SSE endpoint:
-
-```
-http://0.0.0.0:8080/sse
-```
-
-Or use the TypeScript/Node.js version directly via stdio transport.
+A Model Context Protocol (MCP) server that provides remote shell execution capabilities with automatic environment initialization.
 
 ## Features
 
-The server provides a shell execution tool:
+- **Shell Command Execution**: Execute shell commands remotely with timeout and working directory support
+- **Environment Initialization**: Automatically install essential development tools and libraries
+- **System Information**: Get comprehensive system information including available tools and environment status
+- **Multi-Platform Support**: Works with various package managers (apk, apt, yum, dnf, pacman)
+- **Environment Variable Loading**: Automatically loads variables from .env file
+- **Startup Script Execution**: Run custom initialization scripts on environment setup
 
-1. `shell_exec` (Python version) / `shell-exec` (TypeScript version): Execute shell commands remotely with support for:
-   - Custom working directory
-   - Configurable timeout
-   - Detailed output including stdout, stderr, and exit codes
-   - Error handling and timeout management
+## Tools Available
 
-## Node.js/TypeScript Version
+### 1. `initialize_environment`
+Initializes the remote environment with essential development tools and libraries.
 
-For the Node.js version, navigate to the `node/shell` directory:
+**Parameters:**
+- `run_startup_script` (bool, default: true): Whether to run the startup script from .env
+- `install_additional_packages` (string): Additional packages to install (space-separated)
 
-```bash
-cd node/shell
-npm install
-npm run build
-npm start
+**What it installs:**
+- Basic development tools: bash, curl, wget, git, build tools
+- Programming languages: Python3, Node.js, npm
+- Text editors: vim, nano
+- Utilities: unzip, zip, jq
+- Compilers: gcc, g++, make
+
+### 2. `shell_exec`
+Execute shell commands remotely with full control.
+
+**Parameters:**
+- `command` (string): The shell command to execute
+- `cwd` (string, optional): Working directory for the command
+- `timeout` (int, default: 30): Timeout in seconds
+
+### 3. `get_system_info`
+Get comprehensive system information including OS, architecture, available tools, and environment status.
+
+## Environment Configuration
+
+The server reads configuration from a `.env` file:
+
+```env
+# Your API keys and configuration
+MEM0_API_KEY=<your-api-key>
+
+# Startup script to run after environment initialization
+STARTUP_SCRIPT=echo "Environment initialized!" && date && whoami
+
+# Add any other environment variables you need
+CUSTOM_VAR=value
 ```
 
-Or run directly with:
-```bash
-npx @remote-shell/mcp-server
-```
+## Usage Examples
 
-## Why?
+1. **Initialize Environment:**
+   ```
+   Call initialize_environment() to set up the development environment
+   ```
 
-This implementation allows for remote shell execution via MCP. The SSE-based server can run as a process that agents connect to, use, and disconnect from whenever needed. This pattern fits well with "cloud-native" use cases where the server and clients can be decoupled processes on different nodes.
+2. **Execute Commands:**
+   ```
+   Call shell_exec("ls -la", cwd="/tmp") to list files in /tmp directory
+   ```
 
-### Server
+3. **Get System Info:**
+   ```
+   Call get_system_info() to see what's available on the system
+   ```
 
-By default, the server runs on 0.0.0.0:8080 but is configurable with command line arguments like:
+## Installation
 
-```
-uv run main.py --host <your host> --port <your port>
-```
+1. Clone the repository
+2. Install dependencies: `pip install -r requirements.txt` (or use uv)
+3. Configure your `.env` file
+4. Run the server: `python main.py`
 
-The server exposes an SSE endpoint at `/sse` that MCP clients can connect to for executing shell commands remotely.
+## Development
 
-## Security Considerations
+The server automatically detects the package manager and installs appropriate tools for the system. It supports:
 
-**WARNING**: This tool allows execution of arbitrary shell commands. Use with extreme caution and proper security measures:
+- **Alpine Linux** (apk)
+- **Ubuntu/Debian** (apt)
+- **CentOS/RHEL** (yum)
+- **Fedora** (dnf)
+- **Arch Linux** (pacman)
 
-- Only deploy in trusted environments
-- Consider implementing authentication and authorization
-- Limit network access to the server
-- Monitor and log all command executions
-- Consider using sandboxing or containerization
+## Security Note
 
+This server executes shell commands remotely. Use with caution and ensure proper access controls are in place.
